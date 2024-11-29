@@ -1,0 +1,11 @@
+.main {
+  height: 100vh;
+  background-color: rgb(53, 53, 53);
+  padding: 2rem 0;
+}
+
+.main h1 {
+  color: white;
+  font-size: 2rem;
+  margin-bottom: 2rem;
+}

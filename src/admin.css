@@ -1,0 +1,89 @@
+.projekt {
+  display: flex;
+  width: 100%;
+}
+
+.projekt input {
+  width: 100%;
+  padding: 0.5rem;
+  margin: 0.5rem 0;
+  border-radius: 5px;
+  margin-right: 1rem;
+}
+
+.projekt button {
+  padding: 0.5rem 1rem;
+  margin: 0.5rem 0;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.projekt-list {
+  margin: 2rem 0;
+  background-color: white;
+  color: black;
+  padding: 1rem 1.5rem;
+  border-radius: 5px;
+  width: 100%;
+}
+
+.projekt-list input {
+  padding: 0.5rem 1rem;
+  background-color: #f1f1f1;
+  border-radius: 5px;
+  border: none;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+.projekt-list textarea {
+  width: 100%;
+  padding: 0.5rem 1rem;
+  height: 150px;
+  resize: vertical;
+  background-color: #f1f1f1;
+  border: none;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+}
+
+.projekt-list .name {
+  width: 20%;
+}
+
+.projekt-list .desc {
+  width: 20%;
+}
+
+.projekt-list .text {
+  width: 50%;
+}
+
+.btn2 {
+  background-color: red;
+  border: none;
+  padding: 0.75rem;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.btn2:hover {
+  background-color: #b30303;
+}
+
+.edit {
+  background-color: #ffffff;
+  color: black;
+  border: none;
+  padding: 0.75rem;
+  border-radius: 5px;
+  cursor: pointer;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+.edit:hover {
+  background-color: #f1f1f1;
+}
