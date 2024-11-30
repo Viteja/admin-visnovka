@@ -14,7 +14,7 @@ function Navbar() {
           <div className="navmenu">
             <ul className="menu">
               <li>
-                <a href="https://designjj-test.eu/">
+                <a href="https://designjj-test.eu/" target="_blank">
                   <i className="fa-solid fa-house"></i>
                 </a>
               </li>

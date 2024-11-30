@@ -8,7 +8,7 @@ require_once 'ini.php';
 session_start();
 
 // Nastavení časového limitu pro session (10 sekund = 10 sekund)
-$session_lifetime = 10; 
+$session_lifetime = 3600; 
 
 // Kontrola, jestli session ještě není stará 10 sekund
 if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity'] > $session_lifetime)) {
@@ -35,7 +35,7 @@ if ($result && mysqli_num_rows($result) > 0) {
     $row = mysqli_fetch_assoc($result);
     $tokenFromDatabase = $row['token'];
 } else {
-    $tokenFromDatabase = null;
+    $tokenFromDatabase = "ses pomalej";
 }
 
 // Vrácení dat pro JavaScript

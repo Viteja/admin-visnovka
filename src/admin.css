@@ -9,16 +9,55 @@
   margin: 0.5rem 0;
   border-radius: 5px;
   margin-right: 1rem;
+  height: 50px;
+}
+
+.projekt textarea {
+  width: 100%;
+  padding: 0.5rem;
+  margin: 0.5rem 0;
+  border-radius: 5px;
+  margin-right: 1rem;
+  resize: vertical;
+  min-height: 170px;
+  max-height: 300px;
+  font-family: inherit;
+}
+
+.main h2 {
+  margin: 1rem 0;
+  color: white;
+  font-size: 22px;
+  text-transform: uppercase;
+  font-weight: 600;
 }
 
 .projekt button {
   padding: 0.5rem 1rem;
+  display: flex;
+  align-items: center;
   margin: 0.5rem 0;
-  background-color: #007bff;
-  color: white;
+  background-color: #77be69;
+  color: rgb(0, 0, 0);
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  height: 50px;
+}
+
+.projekt button:hover {
+  background-color: #5e9c4f;
+}
+
+.projekt button i {
+  margin-left: 0.5rem;
+  font-size: 16px;
+}
+
+.projekt button span {
+  font-weight: 600;
+  font-size: 14px;
 }
 
 .projekt-list {
@@ -62,7 +101,7 @@
 }
 
 .btn2 {
-  background-color: red;
+  background-color: #b81818;
   border: none;
   padding: 0.75rem;
   color: white;
@@ -86,4 +125,12 @@
 
 .edit:hover {
   background-color: #f1f1f1;
+}
+
+.header {
+  padding: 1rem 0;
+}
+
+th {
+  border-bottom: 1px solid #00000030;
 }

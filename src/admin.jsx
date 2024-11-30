@@ -7,8 +7,45 @@ import axios from "axios";
 
 function Admin() {
   const [creditals, setCreditals] = useState({ name: "", desc: "", text: "" });
+  const [creditals2, setCreditals2] = useState({ text: "" });
+
   const [list, setList] = useState([]);
+  const [list2, setList2] = useState([]);
+
   const [editMode, setEditMode] = useState(false); // Stav pro editaci projektu
+  const [editMode2, setEditMode2] = useState(false); // Stav pro editaci projektu
+
+  const [editId, setEditId] = useState(null); // ID projektu pro editaci
+  const [editId2, setEditId2] = useState(null); // ID projektu pro editaci
+
+  // ------------------------ TOKENY -------------------------
+
+  fetch("https://designjj-test.eu/admin/php/verify-token.php") // Nahraď cestou k PHP skriptu
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Chyba při načítání dat z PHP");
+      }
+      return response.json(); // Očekáváme JSON odpověď
+    })
+    .then((data) => {
+      const sessionToken = data.sessionToken; // Token ze session
+      const databaseToken = data.databaseToken; // Token z databáze
+
+      // Porovnání tokenů
+      if (sessionToken == databaseToken) {
+        // Tokeny se shodují – přesměrování na admin-panel
+        toast.success("Přihlášení proběhlo úspěšně");
+      } else {
+        // Tokeny se neshodují – zůstaň na /admin/
+        window.location.href = "/admin/";
+      }
+    })
+    .catch((error) => {
+      console.error("Chyba:", error);
+      alert("Session vypršela.");
+    });
+
+  // ------------------------     PROJEKTY     ------------------------
 
   // Funkce pro načítání dat z backendu
   const loadData = () => {
@@ -24,17 +61,18 @@ function Admin() {
     loadData(); // Načítání dat při načtení komponenty
   }, []);
 
-  useEffect(() => {
-    update(); // Načítání dat při načtení komponenty
-  }, []);
-
   // Změna hodnot ve formuláři
   const _changeCreditals = (e) => {
     setCreditals({ ...creditals, [e.target.name]: e.target.value });
   };
 
   // Funkce pro aktualizaci dat
-  const update = () => {
+  const update = (id) => {
+    if (!creditals.name || !creditals.desc || !creditals.text) {
+      toast.error("Všechna pole musí být vyplněná!");
+      return;
+    }
+
     fetch("https://designjj-test.eu/admin/php/projekt.php", {
       method: "POST",
       headers: {
@@ -42,7 +80,8 @@ function Admin() {
       },
       body: JSON.stringify({
         type: "update",
-        name: creditals.name, // Název projektu jako identifikátor
+        id: editId, // ID projektu, který chcete aktualizovat
+        name: creditals.name, // Název projektu
         desc: creditals.desc,
         text: creditals.text,
       }),
@@ -53,6 +92,7 @@ function Admin() {
           toast.success("Hodnota byla úspěšně aktualizována");
           loadData(); // Aktualizace seznamu projektů
           setEditMode(false); // Ukončení editačního režimu
+          setEditId(null); // Reset ID po úspěšné aktualizaci
         } else {
           toast.error(data.message || "Chyba při aktualizaci dat");
         }
@@ -62,25 +102,84 @@ function Admin() {
       });
   };
 
-  // Funkce pro odstranění projektu
+  const editRow = (item) => {
+    setCreditals(item);
+    setEditMode(true);
+    setEditId(item.id);
+  };
+
   const remove = (id) => {
-    fetch("https://designjj-test.eu/admin/php/projekt.php", {
+    if (confirm("Opravdu chcete odstranit tento projekt?")) {
+      fetch("https://designjj-test.eu/admin/php/projekt.php", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          type: "remove",
+          id: id,
+        }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.status === "success") {
+            toast.success("Projekt byl úspěšně odstraněn");
+            loadData();
+          } else {
+            toast.error("Chyba při odstraňování projektu");
+          }
+        })
+        .catch((err) => {
+          toast.error("Chyba při odesílání dat: " + err.message);
+        });
+    }
+  };
+
+  // ------------------------     IKONY     ------------------------
+
+  const loadIcons = () => {
+    fetch("https://designjj-test.eu/admin/php/geticons.php", {
+      method: "POST",
+    })
+      .then((res) => res.json())
+      .then((data) => setList2(data))
+      .catch((err) => console.error("Chyba při načítání dat:", err));
+  };
+
+  useEffect(() => {
+    loadIcons();
+  }, []);
+
+  const _changeCreditals2 = (e) => {
+    setCreditals2({ ...creditals, [e.target.name]: e.target.value });
+  };
+
+  const update2 = (id) => {
+    if (!creditals2.text) {
+      toast.error("Všechna pole musí být vyplněná!");
+      return;
+    }
+
+    fetch("https://designjj-test.eu/admin/php/icons.php", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        type: "remove",
-        id: id, // Id projektu, který chcete odstranit
+        type: "update",
+        id: editId2,
+        text: creditals2.text,
       }),
     })
       .then((res) => res.json())
       .then((data) => {
         if (data.status === "success") {
-          toast.success("Projekt byl úspěšně odstraněn");
-          loadData(); // Obnovíme seznam projektů
+          toast.success("Hodnota byla úspěšně aktualizována");
+          loadIcons();
+          setEditMode2(false);
+          setEditId2(null);
         } else {
-          toast.error("Chyba při odstraňování projektu");
+          toast.error(data.message || "Chyba při aktualizaci dat");
         }
       })
       .catch((err) => {
@@ -88,16 +187,43 @@ function Admin() {
       });
   };
 
-  // Funkce pro přechod do editačního režimu
-  const editRow = (item) => {
-    setCreditals(item); // Předání hodnot do editačního formuláře
-    setEditMode(true);
+  const editRow2 = (item2) => {
+    setCreditals2(item2);
+    setEditMode2(true);
+    setEditId2(item2.id);
+  };
+
+  const remove2 = (id) => {
+    if (confirm("Opravdu chcete odstranit tento text?")) {
+      fetch("https://designjj-test.eu/admin/php/icons.php", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          type: "remove",
+          id: id,
+        }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.status === "success") {
+            toast.success("Projekt byl úspěšně odstraněn");
+            loadData();
+          } else {
+            toast.error("Chyba při odstraňování projektu");
+          }
+        })
+        .catch((err) => {
+          toast.error("Chyba při odesílání dat: " + err.message);
+        });
+    }
   };
 
   return (
     <>
-      <ToastContainer position="bottom-right" autoClose={5000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover theme="light" />
       <Navbar />
+      <ToastContainer position="bottom-right" autoClose={5000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover theme="light" />
       <div className="main">
         <div className="container">
           <div className="title">
@@ -105,29 +231,21 @@ function Admin() {
           </div>
           <h2>Projekty</h2>
 
-          {/* Formulář pro přidání nebo úpravu projektu */}
+          {/*  ------------------------     PROJEKTY     ------------------------ */}
           {editMode ? (
             <div className="projekt">
               <input type="text" name="name" placeholder="Název" value={creditals.name} onChange={_changeCreditals} />
               <input type="text" name="desc" placeholder="Podnadpis" value={creditals.desc} onChange={_changeCreditals} />
-              <input type="text" name="text" placeholder="Popis" value={creditals.text} onChange={_changeCreditals} />
-              <button onClick={update}>Odeslat</button>
+              <textarea type="text" name="text" placeholder="Popis" value={creditals.text} onChange={_changeCreditals} />
+              <button className="send" onClick={update}>
+                <span>Uložit</span>
+                <i className="fa-solid fa-floppy-disk"></i>
+              </button>
             </div>
           ) : (
-            <div>
-              <p>
-                <strong>Název:</strong> {creditals.name}
-              </p>
-              <p>
-                <strong>Podnadpis:</strong> {creditals.desc}
-              </p>
-              <p>
-                <strong>Popis:</strong> {creditals.text}
-              </p>
-            </div>
+            <div></div>
           )}
 
-          {/* Seznam projektů */}
           <table className="projekt-list">
             <tbody>
               <tr className="header">
@@ -137,15 +255,54 @@ function Admin() {
                 <th>Akce</th>
               </tr>
               {list.map((item) => (
-                <tr key={item.id}>
+                <tr className="project-item" key={item.id}>
                   <td>{item.name}</td>
                   <td>{item.desc}</td>
                   <td>{item.text}</td>
                   <td>
-                    <button onClick={() => editRow(item)}>Upravit</button>
+                    <button className="edit" onClick={() => editRow(item)}>
+                      <i className="fas fa-edit"></i>
+                    </button>
                   </td>
                   <td>
-                    <button onClick={() => remove(item.id)}>
+                    <button className="btn2" onClick={() => remove(item.id)}>
+                      <i className="fas fa-trash-alt"></i>
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          {/* ------------------------     IKONY     ------------------------  */}
+          <h2>Ikony</h2>
+
+          {editMode2 ? (
+            <div className="projekt">
+              <textarea type="text" name="text" placeholder="Popis" value={creditals2.text} onChange={_changeCreditals2} />
+              <button className="send" onClick={update2}>
+                <span>Uložit</span>
+                <i className="fa-solid fa-floppy-disk"></i>
+              </button>
+            </div>
+          ) : (
+            <div></div>
+          )}
+          <table className="projekt-list">
+            <tbody>
+              <tr className="header">
+                <th>Název</th>
+                <th>Akce</th>
+              </tr>
+              {list2.map((item2) => (
+                <tr className="project-item" key={item2.id}>
+                  <td>{item2.text}</td>
+                  <td>
+                    <button className="edit" onClick={() => editRow2(item2)}>
+                      <i className="fas fa-edit"></i>
+                    </button>
+                  </td>
+                  <td>
+                    <button className="btn2" onClick={() => remove2(item2.id)}>
                       <i className="fas fa-trash-alt"></i>
                     </button>
                   </td>

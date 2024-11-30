@@ -37,7 +37,6 @@ function Login() {
 
     if (response.ok) {
       const result = await response.text();
-      console.log("Odpověď ze serveru:", result);
     } else {
       console.error("Chyba při komunikaci s serverem:", response.status);
     }
@@ -61,13 +60,15 @@ function Login() {
     // Akce při přihlášení (například ověření přihlašovacích údajů)
     if (loginData.some((test) => test.name === username && test.password === password)) {
       sendTokenToDatabase();
-      navigate("/admin/admin-panel");
+      toast.info("Přihlašovaní ...");
+      setTimeout(() => {
+        navigate("/admin/admin-panel");
+      }, 1000); // 2 seconds delay
     } else {
       toast.error("Špatné přihlašovací údaje");
       setUsername("");
       setPassword("");
     }
-    
   };
 
   return (

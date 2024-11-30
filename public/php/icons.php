@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $id = mysqli_real_escape_string($conn, $POST['id']);
             
             // Kontrola počtu záznamů v tabulce
-            $countSql = "SELECT COUNT(*) as count FROM project";
+            $countSql = "SELECT COUNT(*) as count FROM icons";
             $countResult = mysqli_query($conn, $countSql);
             
             if ($countResult) {
@@ -34,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
 
             // Odstranit záznam
-            $sql = "DELETE FROM project WHERE id = '$id'";
+            $sql = "DELETE FROM icons WHERE id = '$id'";
             $run = mysqli_query($conn, $sql);
 
             if ($run) {
@@ -51,12 +51,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($type === "update") {
             
             $id = mysqli_real_escape_string($conn, $POST['id']);
-            $name = mysqli_real_escape_string($conn, $POST['name']);
-            $desc = mysqli_real_escape_string($conn, $POST['desc']);
+     
             $text = mysqli_real_escape_string($conn, $POST['text']);
 
             // Provedení SQL dotazu pro aktualizaci
-            $sql = "UPDATE project SET name = '$name', `desc` = '$desc', text = '$text' WHERE id = $id";
+            $sql = "UPDATE icons SET text = '$text' WHERE id = $id";
             $run = mysqli_query($conn, $sql);
 
             if ($run) {
