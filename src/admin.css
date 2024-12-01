@@ -1,6 +1,12 @@
 .projekt {
   display: flex;
-  width: 100%;
+  flex-direction: column;
+}
+
+.title h1 {
+  font-size: 28px;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
 }
 
 .projekt input {
@@ -24,17 +30,8 @@
   font-family: inherit;
 }
 
-.main h2 {
-  margin: 1rem 0;
-  color: white;
-  font-size: 22px;
-  text-transform: uppercase;
-  font-weight: 600;
-}
-
 .projekt button {
-  padding: 0.5rem 1rem;
-  display: flex;
+  padding: 1rem 1rem;
   align-items: center;
   margin: 0.5rem 0;
   background-color: #77be69;
@@ -43,7 +40,6 @@
   border-radius: 5px;
   cursor: pointer;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-  height: 50px;
 }
 
 .projekt button:hover {
@@ -69,35 +65,61 @@
   width: 100%;
 }
 
-.projekt-list input {
+.projekt input {
   padding: 0.5rem 1rem;
   background-color: #f1f1f1;
   border-radius: 5px;
+  font-size: 16px;
   border: none;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
 }
 
-.projekt-list textarea {
+.projekt textarea {
   width: 100%;
   padding: 0.5rem 1rem;
-  height: 150px;
+  height: 120px;
+  font-size: 18px;
   resize: vertical;
-  background-color: #f1f1f1;
+  background-color: #ffffff;
   border: none;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
   border-radius: 5px;
 }
 
-.projekt-list .name {
+.projekt-list #name {
+  width: 20%;
+  line-height: 24px;
+}
+
+.projekt-list #desc {
+  width: 25%;
+  line-height: 24px;
+}
+
+.projekt-list #text {
+  width: 100%;
+  line-height: 24px;
+}
+
+.projekt-list #text2 {
+  width: 100%;
+  line-height: 24px;
+}
+
+.header .name {
   width: 20%;
 }
 
-.projekt-list .desc {
-  width: 20%;
+.header .desc {
+  width: 25%;
 }
 
-.projekt-list .text {
-  width: 50%;
+.header .text {
+  width: 100%;
+}
+
+.header .btn {
+  width: 10%;
 }
 
 .btn2 {
@@ -107,6 +129,8 @@
   color: white;
   border-radius: 5px;
   cursor: pointer;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  margin-left: 0.5rem;
 }
 
 .btn2:hover {
@@ -128,9 +152,42 @@
 }
 
 .header {
-  padding: 1rem 0;
+  padding: 1rem 1.5rem;
+  display: flex;
+  flex-direction: row;
+
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  background-color: #f3f3f3;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+  text-align: left;
 }
 
-th {
-  border-bottom: 1px solid #00000030;
+td {
+  border-top: 1px solid #0000002e;
+  padding: 0.5rem 1rem;
+  width: 100%;
+}
+
+.btns {
+  display: flex;
+  align-items: center;
+  width: 10%;
+}
+
+.project-item {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-top;
+  width: 100%;
+  margin: 1.5rem 0;
+  cursor: pointer;
+}
+
+.project-item:hover {
+  border-radius: 5px;
+  background-color: #f1f1f1;
 }

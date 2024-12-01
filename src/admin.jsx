@@ -20,30 +20,36 @@ function Admin() {
 
   // ------------------------ TOKENY -------------------------
 
-  fetch("https://designjj-test.eu/admin/php/verify-token.php") // Nahraď cestou k PHP skriptu
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Chyba při načítání dat z PHP");
-      }
-      return response.json(); // Očekáváme JSON odpověď
-    })
-    .then((data) => {
-      const sessionToken = data.sessionToken; // Token ze session
-      const databaseToken = data.databaseToken; // Token z databáze
+  window.onload = () => {
+    verifyToken();
+  };
 
-      // Porovnání tokenů
-      if (sessionToken == databaseToken) {
-        // Tokeny se shodují – přesměrování na admin-panel
-        toast.success("Přihlášení proběhlo úspěšně");
-      } else {
-        // Tokeny se neshodují – zůstaň na /admin/
-        window.location.href = "/admin/";
-      }
-    })
-    .catch((error) => {
-      console.error("Chyba:", error);
-      alert("Session vypršela.");
-    });
+  const verifyToken = () => {
+    fetch("https://designjj-test.eu/admin/php/verify-token.php") // Nahraď cestou k PHP skriptu
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Chyba při načítání dat z PHP");
+        }
+        return response.json(); // Očekáváme JSON odpověď
+      })
+      .then((data) => {
+        const sessionToken = data.sessionToken; // Token ze session
+        const databaseToken = data.databaseToken; // Token z databáze
+
+        // Porovnání tokenů
+        if (sessionToken == databaseToken) {
+          // Tokeny se shodují – přesměrování na admin-panel
+          toast.success("Přihlášení proběhlo úspěšně");
+        } else {
+          // Tokeny se neshodují – zůstaň na /admin/
+          window.location.href = "/admin/";
+        }
+      })
+      .catch((error) => {
+        console.error("Chyba:", error);
+        alert("Session vypršela.");
+      });
+  };
 
   // ------------------------     PROJEKTY     ------------------------
 
@@ -227,10 +233,8 @@ function Admin() {
       <div className="main">
         <div className="container">
           <div className="title">
-            <h1>Admin panel</h1>
+            <h1>Projekty</h1>
           </div>
-          <h2>Projekty</h2>
-
           {/*  ------------------------     PROJEKTY     ------------------------ */}
           {editMode ? (
             <div className="projekt">
@@ -245,26 +249,23 @@ function Admin() {
           ) : (
             <div></div>
           )}
-
           <table className="projekt-list">
             <tbody>
               <tr className="header">
-                <th>Název</th>
-                <th>Podnadpis</th>
-                <th>Popis</th>
-                <th>Akce</th>
+                <th className="name">Název</th>
+                <th className="desc">Podnadpis</th>
+                <th className="text">Popis</th>
+                <th className="btn">Akce</th>
               </tr>
               {list.map((item) => (
                 <tr className="project-item" key={item.id}>
-                  <td>{item.name}</td>
-                  <td>{item.desc}</td>
-                  <td>{item.text}</td>
-                  <td>
+                  <td id="name">{item.name}</td>
+                  <td id="desc">{item.desc}</td>
+                  <td id="text">{item.text}</td>
+                  <td className="btns">
                     <button className="edit" onClick={() => editRow(item)}>
                       <i className="fas fa-edit"></i>
                     </button>
-                  </td>
-                  <td>
                     <button className="btn2" onClick={() => remove(item.id)}>
                       <i className="fas fa-trash-alt"></i>
                     </button>
@@ -273,12 +274,15 @@ function Admin() {
               ))}
             </tbody>
           </table>
+
           {/* ------------------------     IKONY     ------------------------  */}
-          <h2>Ikony</h2>
+          <div className="title">
+            <h1>Ikony</h1>
+          </div>
 
           {editMode2 ? (
             <div className="projekt">
-              <textarea type="text" name="text" placeholder="Popis" value={creditals2.text} onChange={_changeCreditals2} />
+              <input type="text" name="text" placeholder="Popis" value={creditals2.text} onChange={_changeCreditals2} />
               <button className="send" onClick={update2}>
                 <span>Uložit</span>
                 <i className="fa-solid fa-floppy-disk"></i>
@@ -295,13 +299,11 @@ function Admin() {
               </tr>
               {list2.map((item2) => (
                 <tr className="project-item" key={item2.id}>
-                  <td>{item2.text}</td>
-                  <td>
+                  <td id="text2">{item2.text}</td>
+                  <td className="btns">
                     <button className="edit" onClick={() => editRow2(item2)}>
                       <i className="fas fa-edit"></i>
                     </button>
-                  </td>
-                  <td>
                     <button className="btn2" onClick={() => remove2(item2.id)}>
                       <i className="fas fa-trash-alt"></i>
                     </button>
