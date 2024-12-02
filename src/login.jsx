@@ -73,7 +73,7 @@ function Login() {
 
   return (
     <>
-      <ToastContainer position="bottom-right" autoClose={5000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover theme="light" transition:Bounce />
+      <ToastContainer position="bottom-right" autoClose={500} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover theme="light" transition:Bounce />
       <div className="login">
         <h2>Přihlášení</h2>
         <input type="text" id="name" placeholder="Přihlašovací jméno" value={username} onChange={(e) => setUsername(e.target.value)} onKeyDown={handleKeyDown} />
