@@ -8,7 +8,7 @@ function Login() {
   const [loginData, setloginData] = React.useState([]);
 
   const getData = () => {
-    fetch("https://designjj-test.eu/admin/php/login.php")
+    fetch("https://acvisnovka.cz/admin/php/login.php")
       .then((response) => {
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -28,7 +28,7 @@ function Login() {
   const sendTokenToDatabase = async () => {
     // Definuj token, který chceš uložit
 
-    const response = await fetch("https://designjj-test.eu/admin/php/token.php", {
+    const response = await fetch("https://acvisnovka.cz/admin/php/token.php", {
       method: "POST",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",

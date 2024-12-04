@@ -25,7 +25,7 @@ function Admin() {
   };
 
   const verifyToken = () => {
-    fetch("https://designjj-test.eu/admin/php/verify-token.php") // Nahraď cestou k PHP skriptu
+    fetch("https://acvisnovka.cz/admin/php/verify-token.php") // Nahraď cestou k PHP skriptu
       .then((response) => {
         if (!response.ok) {
           throw new Error("Chyba při načítání dat z PHP");
@@ -55,7 +55,7 @@ function Admin() {
 
   // Funkce pro načítání dat z backendu
   const loadData = () => {
-    fetch("https://designjj-test.eu/admin/php/getprojekt.php", {
+    fetch("https://acvisnovka.cz/admin/php/getprojekt.php", {
       method: "POST",
     })
       .then((res) => res.json())
@@ -79,7 +79,7 @@ function Admin() {
       return;
     }
 
-    fetch("https://designjj-test.eu/admin/php/projekt.php", {
+    fetch("https://acvisnovka.cz/admin/php/projekt.php", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -116,7 +116,7 @@ function Admin() {
 
   const remove = (id) => {
     if (confirm("Opravdu chcete odstranit tento projekt?")) {
-      fetch("https://designjj-test.eu/admin/php/projekt.php", {
+      fetch("https://acvisnovka.cz/admin/php/projekt.php", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -144,7 +144,7 @@ function Admin() {
   // ------------------------     IKONY     ------------------------
 
   const loadIcons = () => {
-    fetch("https://designjj-test.eu/admin/php/geticons.php", {
+    fetch("https://acvisnovka.cz/admin/php/geticons.php", {
       method: "POST",
     })
       .then((res) => res.json())
@@ -166,7 +166,7 @@ function Admin() {
       return;
     }
 
-    fetch("https://designjj-test.eu/admin/php/icons.php", {
+    fetch("https://acvisnovka.cz/admin/php/icons.php", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -201,7 +201,7 @@ function Admin() {
 
   const remove2 = (id) => {
     if (confirm("Opravdu chcete odstranit tento text?")) {
-      fetch("https://designjj-test.eu/admin/php/icons.php", {
+      fetch("https://acvisnovka.cz/admin/php/icons.php", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
