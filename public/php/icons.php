@@ -19,28 +19,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // ====== LOGIKA PRO ODSTRANĚNÍ ======
     if ($type === "remove") {
         if (isset($POST['id'])) {
-            $id = mysqli_real_escape_string($conn, $POST['id']);
-            
+            $id = $POST['id'];  // PDO automaticky ošetřuje vstupy, není potřeba mysqli_real_escape_string
+
             // Kontrola počtu záznamů v tabulce
-            $countSql = "SELECT COUNT(*) as count FROM icons";
-            $countResult = mysqli_query($conn, $countSql);
-            
-            if ($countResult) {
-                $row = mysqli_fetch_assoc($countResult);
+            try {
+                $countSql = "SELECT COUNT(*) as count FROM icons";
+                $stmt = $conn->query($countSql);
+                $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
                 if ($row['count'] <= 1) {
                     echo json_encode(["status" => "cannot-delete-last"]);
                     exit;
                 }
+            } catch (PDOException $e) {
+                echo json_encode(["status" => "db-error", "message" => $e->getMessage()]);
+                exit;
             }
 
             // Odstranit záznam
-            $sql = "DELETE FROM icons WHERE id = '$id'";
-            $run = mysqli_query($conn, $sql);
+            try {
+                $sql = "DELETE FROM icons WHERE id = :id";
+                $stmt = $conn->prepare($sql);
+                $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+                $stmt->execute();
 
-            if ($run) {
                 echo json_encode(["status" => "success"]);
-            } else {
-                echo json_encode(["status" => "db-error", "message" => mysqli_error($conn)]);
+            } catch (PDOException $e) {
+                echo json_encode(["status" => "db-error", "message" => $e->getMessage()]);
             }
         } else {
             echo json_encode(["status" => "error", "message" => "Chybí ID pro odstranění"]);
@@ -49,20 +54,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // ====== LOGIKA PRO AKTUALIZACI ======
     if ($type === "update") {
-            
-            $id = mysqli_real_escape_string($conn, $POST['id']);
-     
-            $text = mysqli_real_escape_string($conn, $POST['text']);
+        if (isset($POST['id']) && isset($POST['text'])) {
+            $id = $POST['id'];
+            $text = $POST['text'];
 
-            // Provedení SQL dotazu pro aktualizaci
-            $sql = "UPDATE icons SET text = '$text' WHERE id = $id";
-            $run = mysqli_query($conn, $sql);
+            try {
+                // Provedení SQL dotazu pro aktualizaci
+                $sql = "UPDATE icons SET text = :text WHERE id = :id";
+                $stmt = $conn->prepare($sql);
+                $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+                $stmt->bindParam(':text', $text, PDO::PARAM_STR);
+                $stmt->execute();
 
-            if ($run) {
                 echo json_encode(["status" => "success"]);
-            } else {
-                echo json_encode(["status" => "db-error", "message" => mysqli_error($conn)]);
+            } catch (PDOException $e) {
+                echo json_encode(["status" => "db-error", "message" => $e->getMessage()]);
             }
+        } else {
+            echo json_encode(["status" => "error", "message" => "Chybí ID nebo text pro aktualizaci"]);
         }
     }
+}
 ?>

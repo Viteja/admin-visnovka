@@ -1,11 +1,12 @@
-Options -MultiViews
+#Options -MultiViews
 
 <IfModule mod_rewrite.c>
   RewriteEngine On
   RewriteBase /
 
-  # Přesměrování všech požadavků na /admin/
-  RewriteCond %{REQUEST_FILENAME} !-f
-  RewriteCond %{REQUEST_FILENAME} !-d
-  RewriteRule ^ /parek/ [L]
+# Přesměrování všech požadavků na /admin/
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ /admin/ [L]
 </IfModule>

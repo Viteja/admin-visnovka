@@ -20,9 +20,9 @@ function Admin() {
 
   // ------------------------ TOKENY -------------------------
 
-  window.onload = () => {
+  useEffect(() => {
     verifyToken();
-  };
+  }, []);
 
   const verifyToken = () => {
     fetch("https://acvisnovka.cz/admin/php/verify-token.php") // Nahraď cestou k PHP skriptu
@@ -33,15 +33,28 @@ function Admin() {
         return response.json(); // Očekáváme JSON odpověď
       })
       .then((data) => {
+        // Debugging - výpis tokenů pro ladění
+        console.log("Response data:", data);
+
         const sessionToken = data.sessionToken; // Token ze session
         const databaseToken = data.databaseToken; // Token z databáze
 
+        console.log("Session token:", sessionToken);
+        console.log("Database token:", databaseToken);
+
+        // Kontrola, jestli jsou tokeny správně načteny
+        if (sessionToken === undefined || databaseToken === undefined) {
+          console.error("Jedna nebo obě hodnoty tokenu chybí.");
+          return;
+        }
+
         // Porovnání tokenů
-        if (sessionToken == databaseToken) {
+        if (sessionToken === databaseToken) {
           // Tokeny se shodují – přesměrování na admin-panel
           toast.success("Přihlášení proběhlo úspěšně");
         } else {
           // Tokeny se neshodují – zůstaň na /admin/
+          console.log("Tokeny se neshodují.");
           window.location.href = "/admin/";
         }
       })

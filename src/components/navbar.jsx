@@ -14,14 +14,14 @@ function Navbar() {
           <div className="navmenu">
             <ul className="menu">
               <li>
-                <a href="https://designjj-test.eu/" target="_blank">
+                <a href="https://acvisnovka.cz/" target="_blank">
                   <i className="fa-solid fa-house"></i>
                 </a>
               </li>
             </ul>
             <ul className="menu">
               <li>
-                <a href="https://designjj-test.eu/admin/php/logout.php">
+                <a href="https://acvisnovka.cz/admin/php/logout.php">
                   <i className="fa-solid fa-right-from-bracket"></i>
                 </a>
               </li>

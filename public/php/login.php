@@ -1,19 +1,27 @@
 <?php
-require_once 'ini.php';
-
+require_once 'ini.php'; // Předpokládám, že to obsahuje připojení k databázi pomocí PDO
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    $sql = "SELECT * FROM login";
-    $run = mysqli_query($conn, $sql);
-    if (!$run) {
+    try {
+        // SQL dotaz pro získání všech záznamů z tabulky 'login'
+        $sql = "SELECT * FROM login";
+        $stmt = $conn->query($sql); // Spustí SQL dotaz
+
+        $logins = $stmt->fetchAll(PDO::FETCH_ASSOC); // Načteme všechny výsledky jako asociativní pole
+
+        // Pokud není žádný výsledek, vrátíme prázdné pole
+        if (empty($logins)) {
+            echo '[]';
+        } else {
+            // Vrátíme odpověď jako JSON
+            echo json_encode($logins, JSON_PRETTY_PRINT);
+        }
+    } catch (PDOException $e) {
+        // Chyba při dotazu na databázi
         http_response_code(404);
-        die(mysqli_error($conn));
+        echo json_encode(["error" => "Chyba při zpracování požadavku: " . $e->getMessage()]);
     }
-    if (!$id) echo '[';
-    for ($i = 0; $i < mysqli_num_rows($run); $i++) {
-        echo ($i > 0 ? ',' : '') . json_encode(mysqli_fetch_object($run));
-    }
-    if (!$id) echo ']';
 }
-$conn->close();
+
+$conn = null; // Zavření připojení k databázi
 ?>
